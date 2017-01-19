@@ -4,12 +4,17 @@ Copyright (c) 2017, Tetsuya Mori <t2y3141592@gmail.com>. All rights reserved.
 */
 const originalFunctions = new WeakMap();
 const wrappedFunctions = new WeakMap();
+const keywords = /^(abstract|arguments|await|boolean|break|byte|case|catch|char|class|const|continue|debugger|default|delete|do|double|else|enum|eval|export|extends|false|final|finally|float|for|function|goto|if|implements|import|in|instanceof|int|interface|let|long|native|new|null|package|private|protected|public|return|short|static|super|switch|synchronized|this|throw|throws|transient|true|try|typeof|var|void|volatile|while|with|yield)$/;
 
 function _wrap(_prop, f, forwarder) {
-  return new Function('prop', 'f', 'forwarder',
-    'return function ' + f.name.replace(/^(class|get|set|bound) /, '') +
+  let wrapped = new Function('prop', 'f', 'forwarder',
+    'return function ' + f.name.replace(/^(class|get|set|bound) /, '').replace(keywords, '_$1') +
     ' (...args) { return forwarder(prop, f, args, this, new.target); }'
   )(_prop, f, forwarder);
+  Object.defineProperty(wrapped, 'name', {
+    configurable: true, enumerable: false, writable: false, value: f.name.replace(/^(class|get|set|bound) /, '')
+  });
+  return wrapped;
 }
 
 function wrap(target, forwarder, catcher) {
