@@ -48,7 +48,8 @@ TBD
 
 ## Advantages
 
-- Small overheads
+- Small overheads (Significantly faster than ES6 Proxy)
+- `this` is unique and identical for each instance
 
 ## Known Limitations
 
