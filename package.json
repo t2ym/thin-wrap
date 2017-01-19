@@ -1,6 +1,6 @@
 {
   "name": "thin-wrap",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Thin Class Wrapper",
   "main": "wrap.js",
   "module": "wrap.mjs",
