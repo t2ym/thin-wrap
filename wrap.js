@@ -66,12 +66,12 @@ function wrap(target, forwarder, catcher) {
         }
       }
       let cDesc = Object.getOwnPropertyDescriptors(target);
-      let oDesc = target.prototype ? Object.getOwnPropertyDescriptors(target.prototype) : {};
-      if (oDesc.constructor) {
+      let oDesc = target.prototype ? (Object.getOwnPropertyDescriptors(target.prototype) || {}) : {};
+      if (target.prototype && oDesc.constructor) {
         wrapDesc(target.prototype, 'constructor', oDesc.constructor);
       }
       for (let sprop in cDesc) {
-        wrapDesc(target, sprop, cDesc[sprop], oDesc.constructor ? target.prototype.constructor : null);
+        wrapDesc(target, sprop, cDesc[sprop], target.prototype && oDesc.constructor ? target.prototype.constructor : null);
       }
       for (let oprop in oDesc) {
         if (oprop !== 'constructor') {
